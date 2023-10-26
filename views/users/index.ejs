@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head',url) %>
+  <body class="font-sans">
+    <div class="container mx-auto bg-gray-50 w-full h-full">
+      <!-- Nav -->
+      <%- include('../partials/navbar') %>
+      <!-- Content-->
+      <div class="flex flex-row w-full h-full space-x-4 mt-3 ">
+        <!-- Left Content -->
+        <div class="flex basis-1/4 flex-col space-y-3 text-lg">
+            <!--Left Content Categories Partials -->
+            <%- include('../partials/categories-partials') %>
+        </div>
+        <!-- Right Content -->
+        <div class="basis-3/4">
+            <!-- Right Content Title -->
+            <h1 class="text-3xl font-bold m-2">Popüler Kurslar</h1>
+            
+            <!-- Right Content Blogs-->
+            <% blogs.forEach(blog => { %>
+              <% if (blog.anasayfa) { %>
+                <%-include("../partials/blogs-partials",blog) %>
+              <% } %>
+            <% }) %>
+            
+            <!-- Pagination -->
+            <% if (blogs.filter(blog=>blog.anasayfa).length > 2) { %>
+              <%-include("../partials/pagination") %>
+            <% } %>
+           
+        </div>
+        
+        
+      </div>
+    </div>
+  </body>
+</html>

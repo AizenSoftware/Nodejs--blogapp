@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head',{url}) %>
+  <body class="font-sans">
+    <div class="container mx-auto w-full h-full">
+      <!-- Nav -->
+      <%- include('../partials/navbar') %>
+      <!-- Put Delete İnfo -->
+        <% if (action != 'undedfined' && action == 'edit') { %>
+            <div class="w-full bg-green-400 text-black font-serif my-2 p-3 rounded-sm">
+              <%=blogid %> id numaralı blog güncellendi.
+            </div>
+        <% } %>
+        <% if (action != 'undedfined' && action == 'delete') { %>
+          <div class="w-full bg-green-400 text-black font-serif my-2 p-3 rounded-sm">Blog Silindi.</div>
+      <% } %>
+      <% if (action != 'undedfined' && action == 'create') { %>
+        <div class="w-full bg-green-400 text-black font-serif my-2 p-3 rounded-sm">Blog Oluşturuldu.</div>
+    <% } %>
+      <!-- Table-->
+      <div class="relative overflow-x-auto">
+        <table
+          class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+        >
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th scope="col" class="px-6 py-3">id</th>
+              <th scope="col" class="px-6 py-3">resim</th>
+              <th scope="col" class="px-6 py-3">baslik</th>
+              <th scope="col" class="px-6 py-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+           <% blogs.forEach(blog => { %>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th
+                  scope="row"
+                  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                 <%=blog.blogid %>
+                </th>
+                <td class="px-6 py-4"><img class="w-44" src="/images/<%=blog.resim%>" alt=""></td>
+                <td class="px-6 py-4"><%=blog.baslik%></td>
+                <td class="px-6 py-4">
+                    <a href="/admin/blogs/<%=blog.blogid%>"><button class="w-16 p-1 bg-blue-600 rounded-md text-white mr-3">Edit</button></a>
+                    <a href="/admin/blog/delete/<%=blog.blogid%>"><button class="w-16 p-1 bg-red-600 rounded-md text-white">Delete</button></a>
+                </td>
+              </tr>
+           <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

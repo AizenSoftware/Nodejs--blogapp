@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head',{url}) %>
+</head>
+<body>
+    <div class="flex flex-col justify-center items-center container mx-auto mt-5 border-2 w-full bg-gray-300 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold"><%=blog.baslik %></strong>
+        <span class="block sm:inline">Bu blogu silmek istediğinize emin misiniz</span>
+        <div class="flex items-center space-x-1 mt-3">
+            <form  method="post">
+                <input type="hidden" name="blogid" value="<%=blog.blogid %>">
+                <button class="bg-red-500 px-3 py-2 rounded-md hover:bg-red-700  text-white duration-300">Evet</button>
+                <a href="/admin/blogs" class="bg-blue-500 px-3 py-2 rounded-md hover:bg-blue-700 text-white duration-300">Vageç</a>
+            </form>
+        </div>
+      </div>
+</body>
+</html>

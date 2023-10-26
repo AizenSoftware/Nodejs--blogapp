@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head',{url}) %>
+  <body class="font-sans">
+    <div class="container mx-auto w-full h-full">
+      <!-- Nav -->
+      <%- include('../partials/navbar') %>
+      <!-- Put Delete İnfo -->
+        <% if (action != 'undedfined' && action == 'edit') { %>
+            <div class="w-full bg-green-400 text-black font-serif my-2 p-3 rounded-sm">
+              <%=categoryid%> id numaralı category güncellendi.
+            </div>
+        <% } %>
+        <% if (action != 'undedfined' && action == 'delete') { %>
+          <div class="w-full bg-green-400 text-black font-serif my-2 p-3 rounded-sm">Kategori Silindi.</div>
+      <% } %>
+      <% if (action != 'undedfined' && action == 'create') { %>
+        <div class="w-full bg-green-400 text-black font-serif my-2 p-3 rounded-sm">Kategori Oluşturuldu.</div>
+    <% } %>
+      <!-- Table-->
+      <div class="relative overflow-x-auto">
+        <table
+          class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+        >
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th scope="col" class="w-10 px-6 py-3">id</th>
+              <th scope="col" class="w-auto px-6 py-3">name</th>
+              <th scope="col" class="w-auto px-6 py-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+           <% categories.forEach(category => { %>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th
+                  scope="row"
+                  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                 <%=category.categoryid %>
+                </th>
+                <td class="w-auto px-6 py-4"><%=category.name%></td>
+                <td class="flex items-center justify-end px-6 py-4">
+                    <a href="/admin/category/<%=category.categoryid%>"><button class="w-16 p-1 bg-blue-600 rounded-md text-white mr-3">Edit</button></a>
+                    <a href="/admin/category/delete/<%=category.categoryid%>"><button class="w-16 p-1 bg-red-600 rounded-md text-white">Delete</button></a>
+                </td>
+              </tr>
+           <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

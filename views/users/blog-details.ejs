@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head',{url}) %>
+  <body class="font-sans">
+    <div class="container mx-auto w-full h-full">
+      <!-- Nav -->
+      <%- include('../partials/navbar') %>
+      <!-- Content-->
+      <div class="flex w-full space-x-4 mt-3 ">
+        <div class="w-full h-28">
+            <!-- Content Parag -->
+            <div class="flex flex-col m-2">
+                <!-- Image -->
+                <img class="w-full max-w-md basis-2/5 mb-5 justify-center" src="/images/<%=blog.resim%>" alt="">
+                <!-- İnfo -->
+                <div class="flex flex-col basis-3/5 justify-center">
+                    <a href="/blogs/<%=blog.blogid%>">
+                        <h2 class="text-2xl font-bold mb-4"><%=blog.baslik%></h2>
+                    </a>
+                    <p class="p-2"><%blog.altbaslik%></p>
+                    <hr>
+                    <p class="p-2"><%-blog.aciklama%></p>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
