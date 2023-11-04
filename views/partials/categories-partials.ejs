@@ -1,8 +1,8 @@
 
-<a href="/" class="p-3 rounded-lg border-2">Tüm Kurslar</a>
+<a href="/" class="p-3 rounded-lg border-2 <%=selectedCategory == null ?'text-white bg-blue-600' : '' %>">Tüm Kurslar</a>
 <% categories.forEach(category => { %>
     <a 
     class="p-3 rounded-lg border-2
-    <%= selectedCategory == category.categoryid ? 'text-white bg-blue-600':'' %>" 
-    href="/blogs/category/<%=category.categoryid%>"><%=category.name%></a>
+    <%= selectedCategory == category.id ? 'text-white bg-blue-600':'' %>" 
+    href="/blogs/category/<%=category.id%>"><%=category.name%></a>
   <% }) %>

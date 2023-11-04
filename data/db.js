@@ -1,13 +1,32 @@
 const mysql = require("mysql2");
 const config = require("../config");
 
-let connetion = mysql.createConnection(config.db);
+const Sequelize = require("sequelize");
 
-connetion.connect((err)=>{
-    if(err){
-        return console.log(err);
-    }
-    console.log("Mysql veritabanına bağlantısı yapıldı");
+const sequelize = new Sequelize(config.db.database,config.db.user,config.db.password,{
+    dialect:"mysql",
+    host:config.db.host
 })
 
-module.exports = connetion.promise();
+async function connect(){
+    try {
+        await sequelize.authenticate();
+        console.log('Mysql veritabanına bağlantısı yapıldı');
+      } catch (error) {
+        console.error('Bağlantı hatası:', error);
+      }
+}
+connect();
+
+module.exports = sequelize;
+
+// let connetion = mysql.createConnection(config.db);
+
+// connetion.connect((err)=>{
+//     if(err){
+//         return console.log(err);
+//     }
+//     console.log("Mysql veritabanına bağlantısı yapıldı");
+// })
+
+// module.exports = connetion.promise();

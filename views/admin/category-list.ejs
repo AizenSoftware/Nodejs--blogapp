@@ -37,12 +37,12 @@
                 <th
                   scope="row"
                   class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                 <%=category.categoryid %>
+                 <%=category.dataValues.id %>
                 </th>
-                <td class="w-auto px-6 py-4"><%=category.name%></td>
+                <td class="w-auto px-6 py-4"><%=category.dataValues.name%></td>
                 <td class="flex items-center justify-end px-6 py-4">
-                    <a href="/admin/category/<%=category.categoryid%>"><button class="w-16 p-1 bg-blue-600 rounded-md text-white mr-3">Edit</button></a>
-                    <a href="/admin/category/delete/<%=category.categoryid%>"><button class="w-16 p-1 bg-red-600 rounded-md text-white">Delete</button></a>
+                    <a href="/admin/category/<%=category.dataValues.id%>"><button class="w-16 p-1 bg-blue-600 rounded-md text-white mr-3">Edit</button></a>
+                    <a href="/admin/category/delete/<%=category.dataValues.id%>"><button class="w-16 p-1 bg-red-600 rounded-md text-white">Delete</button></a>
                 </td>
               </tr>
            <% }) %>

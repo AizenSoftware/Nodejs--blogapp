@@ -61,9 +61,9 @@
           <div class="md:w-2/3">
             <select name="kategori" id="kategori">
               <option value="-1" selected>Seçiniz</option>
-              <% categories.forEach(category => { %>
-                <option value="<%=category.categoryid%>"><%=category.name %></option>
-              <% }) %>
+                 <% categories.forEach(category => { %>
+                    <option value="<%=category.dataValues.categoryid%>"><%=category.dataValues.name %></option>
+                 <% }) %>
             </select>
           </div>
         </div>

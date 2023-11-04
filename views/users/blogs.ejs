@@ -9,6 +9,7 @@
       <div class="flex flex-row w-full h-full space-x-4 mt-3 ">
         <!-- Left Content -->
         <div class="flex basis-1/4 flex-col space-y-3 text-lg">
+          
           <!-- Categories Partials -->
           <%- include('../partials/categories-partials') %>
 
@@ -16,14 +17,19 @@
         <!-- Right Content Container -->
         <div class="basis-3/4">
             <!-- Right Content Title -->
-            <h1 class="text-3xl font-bold m-2">Tüm Kurslar</h1>
+            <h1 class="text-3xl font-bold m-2"><%=title.name%></h1>
             <!-- Right Content Blogs-->
             <% if (blogs.length == 0) { %>
                <%- include('../partials/no-products') %>   
             <% } %>
-            <% blogs.forEach(blog => { %>
-              <%-include("../partials/blogs-partials",blog) %>
-            <% }) %>
+            
+              <% blogs.forEach(blog => { %> 
+                
+                  <%-include("../partials/blogs-partials",blog) %>
+
+              <% }) %>
+    
+            
                         
             <% if (blogs.filter(blog=>blog.onay).length > 2) { %>
               <%-include("../partials/pagination") %>

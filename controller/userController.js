@@ -1,12 +1,20 @@
-const db = require("../data/db");
+const { raw } = require("mysql2");
+const Blog = require("../models/blog")
+const Category = require("../models/category")
+
+const { Op } = require("sequelize");
 
 const getIndexPage = async (req, res) => {
   try {
-    const [blogs] = await db.execute("select * from blog");
-    const [categories] = await db.execute("select * from category");
+    const blogs = await Blog.findAll({
+      where:{
+       [Op.or]:[{anasayfa: true},{onay: true}]
+      },
+      raw: true, // raw: true ekstra parametre getirmiyor sadece istenilen.
+    });
+    const categories = await Category.findAll({raw: true});
     res.render("users/index", {
       url: req.protocol + "://" + req.headers.host,
-      title: blogs[0].baslik,
       blogs: blogs,
       categories: categories,
       selectedCategory:null,
@@ -18,11 +26,18 @@ const getIndexPage = async (req, res) => {
 
 const getBlogsPage = async (req, res) => {
   try {
-    const [blogs] = await db.execute("select * from blog");
-    const [categories] = await db.execute("select * from category");
+    const blogs = await Blog.findAll({
+      where:{
+        onay: true,
+      },
+      raw : true
+    });
+    const categories = await Category.findAll({raw : true});
+    const [categoryNames, ]= await Category.findAll({raw : true,})
+
     res.render("users/blogs", {
       url: req.protocol + "://" + req.headers.host,
-      title: blogs[0].baslik,
+      title: categoryNames,
       blogs: blogs,
       categories: categories,
       selectedCategory:null,
@@ -33,15 +48,20 @@ const getBlogsPage = async (req, res) => {
 };
 
 const getBlogDetails = async (req, res) => {
-  const id = req.params.id;
+  const blogid = req.params.id;
   try {
-    const [blog] = await db.execute("select * from blog where blogid=?", [id]);
-
-    if (blog[0]) {
+    const blog = await Blog.findOne({
+      where:{
+        id: blogid
+      },
+      raw : true,
+    })
+    console.log(blog);
+    if (blog) {
       return res.render("users/blog-details", {
         url: req.protocol + "://" + req.headers.host,
-        title: blog[0].baslik,
-        blog: blog[0],
+        title: blog.baslik,
+        blog: blog,
         selectedCategory:null,
       });
     }
@@ -54,16 +74,29 @@ const getBlogDetails = async (req, res) => {
 const blogsCategory = async (req, res) => {
   const id = req.params.id;
   try {
-    const [blogs] = await db.execute("select * from blog where category =?", [id]);
-    const [categories] = await db.execute("select * from category");
-
+    const blogs = await Blog.findAll({
+      where:{
+        categoryId: id,
+      },
+      raw : true,
+    })
+    const categories = await Category.findAll({raw : true})
+    const [categoryNames, ]= await Category.findAll({
+      where:{
+        id:id
+      },
+      raw : true,
+    })
+  
+    
     if (blogs[0] !== 0) {
       res.render("users/blogs", {
         url: req.protocol + "://" + req.headers.host,
-        title: blogs.baslik,
+        title: categoryNames,
         blogs: blogs,
         categories: categories,
         selectedCategory:id,
+
       });
     }else{
       console.log("Kategori boş");
