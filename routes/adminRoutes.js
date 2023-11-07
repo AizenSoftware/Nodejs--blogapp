@@ -6,10 +6,12 @@ const router = express.Router();
 
 
 router.route("/blogs").get(adminController.adminBlogList); // admin/blogs
-router.route("/blog/create").get(adminController.blogCreate).post(imageUpload.upload.single("resim"),adminController.blogCreatePost); // admin/blog/create
-router.route("/blogs/:blogid").get(adminController.adminBlogEdit).post(imageUpload.upload.single("resim"),adminController.adminBlogEditPost); // admin/blogs/2
+router.route("/blog/create").get(adminController.blogCreate).post(imageUpload.upload.single("resim"),adminController.blogCreatePost);
+
+router.route("/blogs/:blogid").get(adminController.adminBlogEdit).post(imageUpload.upload.single("resim"),adminController.adminBlogEditPost);
 router.route("/blog/delete/:blogid").get(adminController.adminBlogDelete).post(adminController.adminBlogDeletePost);
 
+router.route("/categories/remove").post(adminController.adminCategoryRemove)
 router.route("/categories").get(adminController.adminCategoryList);
 router.route("/category/create").get(adminController.categoryCreate).post(adminController.categoryCreatePost);
 router.route("/category/:categoryid").get(adminController.adminCategoryEdit).post(adminController.adminCategoryEditPost);

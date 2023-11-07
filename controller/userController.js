@@ -76,7 +76,11 @@ const blogsCategory = async (req, res) => {
   try {
     const blogs = await Blog.findAll({
       where:{
-        categoryId: id,
+       onay:true,
+      },
+      include:{
+        model:Category,
+        where:{id:id}
       },
       raw : true,
     })
@@ -96,7 +100,6 @@ const blogsCategory = async (req, res) => {
         blogs: blogs,
         categories: categories,
         selectedCategory:id,
-
       });
     }else{
       console.log("Kategori boş");

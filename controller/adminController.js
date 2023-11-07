@@ -2,12 +2,18 @@ const fs = require("fs");
 //Models
 const Blog = require("../models/blog");
 const Category = require("../models/category");
+const { Op } = require("sequelize");
+const sequelize = require("../data/db");
 
 
 const adminBlogList = async (req, res) => {
   try {
     const blogs = await Blog.findAll({
       attributes: ["id", "baslik", "altbaslik", "resim"],
+      include:{
+        model:Category,
+        attributes:["name"]
+      }
     });
 
     res.render("admin/blog-list", {
@@ -60,7 +66,15 @@ const blogCreatePost = async (req, res) => {
 const adminBlogEdit = async (req, res) => {
   const blogid = req.params.blogid;
   try {
-    const blog = await Blog.findByPk(blogid);
+    const blog = await Blog.findOne({
+      where:{
+        id: blogid
+      },
+      include:{
+        model:Category,
+        attributes:["id"]
+      }
+    });
     const categories = await Category.findAll();
 
     if (blog) {
@@ -77,7 +91,7 @@ const adminBlogEdit = async (req, res) => {
 };
 
 const adminBlogEditPost = async (req, res) => {
-  let { baslik, aciklama, anasayfa, onay, kategori, blogid, altbaslik } = req.body;
+  let { baslik, aciklama, anasayfa, onay, blogid, altbaslik,kategoriIds } = req.body;
   let resim = req.body.resim;
   anasayfa = anasayfa == "on" ? 1 : 0;
   onay = onay == "on" ? 1 : 0;
@@ -90,22 +104,39 @@ const adminBlogEditPost = async (req, res) => {
   }
 
   try {
-    await Blog.update(
-      {
-        baslik,
-        altbaslik,
-        aciklama,
-        resim,
-        anasayfa,
-        onay,
-        categoryId: kategori,
+    const blog = await Blog.findOne({
+      where:{
+        id: blogid
       },
-      {
-        where: {
-          id: blogid,
-        },
+      include:{
+        model:Category,
+        attributes:["id"]
       }
-    );
+    });
+    console.log("KategoriIds",kategoriIds)
+    if(blog){
+      blog.baslik = baslik;
+      blog.altbaslik = altbaslik;
+      blog.aciklama = aciklama;
+      blog.resim = resim;
+      blog.anasayfa = anasayfa;
+      blog.onay = onay;
+      
+      if(kategoriIds == undefined){
+        await blog.removeCategories(blog.categories);
+      }else{
+        await blog.removeCategories(blog.categories);
+        const selectedCategories = await Category.findAll({
+          where:{
+            id: {
+              [Op.in] : kategoriIds,
+            }
+          }
+        })
+        await blog.addCategories(selectedCategories);
+      }
+
+    }
     res.redirect("/admin/blogs?action=edit&blogid=" + blogid);
   } catch (error) {
     console.log(error);
@@ -167,7 +198,7 @@ const categoryCreate = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-};
+};    
 
 const categoryCreatePost = async (req, res) => {
   let name = req.body.name;
@@ -183,10 +214,15 @@ const adminCategoryEdit = async (req, res) => {
   const categoryid = req.params.categoryid;
   try {
     const category = await Category.findByPk(categoryid);
+    const blogs = await category.getBlogs();
+    const countBlogs = await category.countBlogs();
+
     if (category) {
       return res.render("admin/category-edit", {
         url: req.protocol + "://" + req.headers.host,
         category: category.dataValues,
+        blogs: blogs,
+        countBlogs,
       });
     }
     res.redirect("admin/categories");
@@ -211,6 +247,13 @@ const adminCategoryEditPost = async (req, res) => {
     console.log(error);
   }
 };
+const adminCategoryRemove = async (req, res) =>{
+  const {blogid, categoryid} = req.body;
+
+  await sequelize.query(`delete from blogCategories where blogId=${blogid} and categoryId=${categoryid}`)
+  res.redirect("/admin/category/" + categoryid);
+
+}
 const adminCategoryDelete = async (req, res) => {
   const categoryid = req.params.categoryid;
   try {
@@ -252,4 +295,5 @@ module.exports = {
   adminCategoryEditPost,
   adminCategoryDelete,
   adminCategoryDeletePost,
+  adminCategoryRemove,
 };

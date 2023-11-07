@@ -29,6 +29,43 @@
           </div>
         </div>
       </form>
+      <div class="w-full mt-4">Blog sayısı: <%=countBlogs%></div>
+      <table
+          class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mt-5"
+        >
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th scope="col" class="px-6 py-3">id</th>
+              <th scope="col" class="px-6 py-3">resim</th>
+              <th scope="col" class="px-6 py-3">baslik</th>
+              <th scope="col" class="px-6 py-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+           <% blogs.forEach(blog => { %>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th
+                  scope="row"
+                  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                 <%=blog.dataValues.id %>
+                </th>
+                <td class="px-6 py-4"><img class="w-44" src="/images/<%=blog.dataValues.resim%>" alt=""></td>
+                <td class="px-6 py-4"><%=blog.dataValues.baslik%></td>
+                <td class="px-6 py-4">
+                    <a href="/admin/blogs/<%=blog.dataValues.id%>"><button class="w-20 p-1 bg-blue-600 rounded-md text-white mr-3">Edit</button></a>
+                    
+                    <form action="/admin/categories/remove" method="post">
+                      <input type="hidden" name="blogid" value="<%=blog.id %>">
+                      <input type="hidden" name="categoryid" value="<%=category.id %>">
+                      <button type="submit" value="" class="w-20 p-1 bg-red-600 rounded-md text-white inline-block">Kategoriden Çıkar</button>
+                    </form>
+                </td>
+              </tr>
+           <% }) %>
+          </tbody>
+        </table>
     </div>
   </body>
 </html>

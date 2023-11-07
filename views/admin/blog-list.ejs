@@ -29,6 +29,7 @@
               <th scope="col" class="px-6 py-3">id</th>
               <th scope="col" class="px-6 py-3">resim</th>
               <th scope="col" class="px-6 py-3">baslik</th>
+              <th scope="col" class="px-6 py-3">kategori</th>
               <th scope="col" class="px-6 py-3"></th>
             </tr>
           </thead>
@@ -42,6 +43,13 @@
                 </th>
                 <td class="px-6 py-4"><img class="w-44" src="/images/<%=blog.dataValues.resim%>" alt=""></td>
                 <td class="px-6 py-4"><%=blog.dataValues.baslik%></td>
+   
+                  <td class="px-6 py-4">
+                    <% blog.categories.forEach(category => { %>
+                          <%=category.name %>
+                    <% }) %>
+                  </td>
+          
                 <td class="px-6 py-4">
                     <a href="/admin/blogs/<%=blog.dataValues.id%>"><button class="w-16 p-1 bg-blue-600 rounded-md text-white mr-3">Edit</button></a>
                     <a href="/admin/blog/delete/<%=blog.dataValues.id%>"><button class="w-16 p-1 bg-red-600 rounded-md text-white">Delete</button></a>
