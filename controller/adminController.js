@@ -4,7 +4,8 @@ const Blog = require("../models/blog");
 const Category = require("../models/category");
 const { Op } = require("sequelize");
 const sequelize = require("../data/db");
-
+const slugField = require("../helpers/slugfield");
+const { default: slugify } = require("slugify");
 
 const adminBlogList = async (req, res) => {
   try {
@@ -43,19 +44,19 @@ const blogCreate = async (req, res) => {
 };
 
 const blogCreatePost = async (req, res) => {
-  let { baslik, aciklama, anasayfa, onay, kategori, altbaslik } = req.body;
+  let { baslik, aciklama, anasayfa, onay, altbaslik} = req.body;
   let resim = req.file.filename;
   anasayfa = anasayfa == "on" ? 1 : 0;
   onay = onay == "on" ? 1 : 0;
   try {
     await Blog.create({
       baslik: baslik,
+      url:slugify(baslik),
       altbaslik: altbaslik,
       aciklama: aciklama,
       resim: resim,
       anasayfa: anasayfa,
-      onay: onay,
-      categoryId: kategori,
+      onay: onay
     });
     res.redirect("/admin/blogs?action=create");
   } catch (error) {
@@ -91,7 +92,7 @@ const adminBlogEdit = async (req, res) => {
 };
 
 const adminBlogEditPost = async (req, res) => {
-  let { baslik, aciklama, anasayfa, onay, blogid, altbaslik,kategoriIds } = req.body;
+  let { baslik, aciklama, anasayfa, onay, blogid, altbaslik, kategoriIds, url} = req.body;
   let resim = req.body.resim;
   anasayfa = anasayfa == "on" ? 1 : 0;
   onay = onay == "on" ? 1 : 0;
@@ -113,14 +114,15 @@ const adminBlogEditPost = async (req, res) => {
         attributes:["id"]
       }
     });
-    console.log("KategoriIds",kategoriIds)
     if(blog){
       blog.baslik = baslik;
+      blog.url = url;
       blog.altbaslik = altbaslik;
       blog.aciklama = aciklama;
       blog.resim = resim;
       blog.anasayfa = anasayfa;
       blog.onay = onay;
+    
       
       if(kategoriIds == undefined){
         await blog.removeCategories(blog.categories);

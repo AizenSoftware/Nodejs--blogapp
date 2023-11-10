@@ -11,12 +11,12 @@ router.route("/blog/create").get(adminController.blogCreate).post(imageUpload.up
 router.route("/blogs/:blogid").get(adminController.adminBlogEdit).post(imageUpload.upload.single("resim"),adminController.adminBlogEditPost);
 router.route("/blog/delete/:blogid").get(adminController.adminBlogDelete).post(adminController.adminBlogDeletePost);
 
-router.route("/categories/remove").post(adminController.adminCategoryRemove)
+
 router.route("/categories").get(adminController.adminCategoryList);
 router.route("/category/create").get(adminController.categoryCreate).post(adminController.categoryCreatePost);
 router.route("/category/:categoryid").get(adminController.adminCategoryEdit).post(adminController.adminCategoryEditPost);
 router.route("/category/delete/:categoryid").get(adminController.adminCategoryDelete).post(adminController.adminCategoryDeletePost);
-
+router.route("/categories/remove").post(adminController.adminCategoryRemove)
 
 
 module.exports = router;

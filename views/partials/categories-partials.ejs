@@ -3,6 +3,6 @@
 <% categories.forEach(category => { %>
     <a 
     class="p-3 rounded-lg border-2
-    <%= selectedCategory == category.id ? 'text-white bg-blue-600':'' %>" 
-    href="/blogs/category/<%=category.id%>"><%=category.name%></a>
+    <%= selectedCategory == category.url ? 'text-white bg-blue-600':'' %>" 
+    href="/blogs/category/<%=category.url%>"><%=category.name%></a>
   <% }) %>

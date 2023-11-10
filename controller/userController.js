@@ -25,12 +25,18 @@ const getIndexPage = async (req, res) => {
 };
 
 const getBlogsPage = async (req, res) => {
+    const size = 3;
+    const {page = 0} = req.query;
+    const slug = req.params.slug;
   try {
-    const blogs = await Blog.findAll({
+    const {rows, count} = await Blog.findAndCountAll({
       where:{
         onay: true,
       },
-      raw : true
+      raw : true,
+      include: slug ? {model:Category,where:{url: slug}}:null,
+      limit:size,
+      offset: page * size // 0 * 3 il 3 tane al 1 * 3 3 tane ötele 
     });
     const categories = await Category.findAll({raw : true});
     const [categoryNames, ]= await Category.findAll({raw : true,})
@@ -38,9 +44,12 @@ const getBlogsPage = async (req, res) => {
     res.render("users/blogs", {
       url: req.protocol + "://" + req.headers.host,
       title: categoryNames,
-      blogs: blogs,
+      blogs: rows,
+      totalItems:count,
+      totalPages:Math.ceil(count / size),
+      currentPage:page,
       categories: categories,
-      selectedCategory:null,
+      selectedCategory:slug,
     });
   } catch (error) {
     console.log(error);
@@ -48,11 +57,11 @@ const getBlogsPage = async (req, res) => {
 };
 
 const getBlogDetails = async (req, res) => {
-  const blogid = req.params.id;
+  const slug = req.params.slug;
   try {
     const blog = await Blog.findOne({
       where:{
-        id: blogid
+        url: slug
       },
       raw : true,
     })
@@ -71,42 +80,6 @@ const getBlogDetails = async (req, res) => {
   }
 };
 
-const blogsCategory = async (req, res) => {
-  const id = req.params.id;
-  try {
-    const blogs = await Blog.findAll({
-      where:{
-       onay:true,
-      },
-      include:{
-        model:Category,
-        where:{id:id}
-      },
-      raw : true,
-    })
-    const categories = await Category.findAll({raw : true})
-    const [categoryNames, ]= await Category.findAll({
-      where:{
-        id:id
-      },
-      raw : true,
-    })
-  
-    
-    if (blogs[0] !== 0) {
-      res.render("users/blogs", {
-        url: req.protocol + "://" + req.headers.host,
-        title: categoryNames,
-        blogs: blogs,
-        categories: categories,
-        selectedCategory:id,
-      });
-    }else{
-      console.log("Kategori boş");
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
 
-module.exports = { getIndexPage, getBlogsPage, getBlogDetails, blogsCategory };
+
+module.exports = { getIndexPage, getBlogsPage, getBlogDetails, };
